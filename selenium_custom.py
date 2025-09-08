@@ -1,13 +1,7 @@
-import logging
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-
-# ---------------- ログ設定 ----------------
-logging.basicConfig(
-    level=logging.INFO,
-    format="[%(levelname)s] %(asctime)s - %(message)s"
-)
-logger = logging.getLogger(__name__)
+from selenium.webdriver.common.by import By
+from logger import logger 
 
 # ---------------- ChromeDriverManager ----------------
 class ChromeDriverManager:
