@@ -1,41 +1,39 @@
 import logging
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 
 # ---------------- ログ設定 ----------------
+logging.basicConfig(
+    level=logging.INFO,
+    format="[%(levelname)s] %(asctime)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-handler = logging.StreamHandler()
-formatter = logging.Formatter("[%(levelname)s] %(asctime)s - %(message)s")
-handler.setFormatter(formatter)
-logger.addHandler(handler)
 
 # ---------------- ChromeDriverManager ----------------
 class ChromeDriverManager:
-    """Chromeブラウザを起動するクラス"""
+    """Chromeブラウザを起動してdriverを取得するクラス（Selenium Managerを利用）"""
 
     def __init__(self):
         try:
-            options = self.chrome_option()             # 起動オプション設定
-            self.driver = self.chrome_process(options) # driver生成
+            options = self.chrome_option()             # 起動オプションを作成
+            self.driver = self.chrome_process(options) # driverを生成
             logger.info("Chromeを起動しました！")
         except Exception as e:
             logger.error(f"Chromeの起動に失敗しました: {e}")
-            raise
+            raise  # エラーをそのまま投げて処理を停止
 
     def chrome_option(self):
-        """ウィンドウサイズを設定"""
+        """起動オプションを設定（今回はウィンドウサイズのみ）"""
         options = Options()
         options.add_argument("--window-size=1280,800")
         return options
 
     def chrome_process(self, options):
         """webdriver.Chrome() で driver を生成"""
-        return webdriver.Chrome(options=options)
+        return webdriver.Chrome(options=options)  # Selenium Manager が自動でdriverを準備
 
     def get_driver(self):
-        """driverを外部に返す"""
+        """driverを返す"""
         return self.driver
 
 # ---------------- GetElement ----------------
@@ -46,16 +44,21 @@ class GetElement:
         self.driver = driver
 
     def get_id_element(self):
-        return self.driver.find_element(By.ID, "username")  # 仮のID
+        username_field = self.driver.find_element(By.ID, "username")
+        return username_field
 
     def get_pass_element(self):
-        return self.driver.find_element(By.NAME, "password")  # 仮のNAME
+        password_field = self.driver.find_element(By.NAME, "password")
+        return password_field
 
     def get_check_box_element(self):
-        return self.driver.find_element(By.XPATH, "//input[@type='checkbox']")
-
+        checkbox = self.driver.find_element(By.XPATH, "//input[@type='checkbox']")
+        return checkbox
+    
     def get_login_btn_element(self):
-        return self.driver.find_element(By.XPATH, "//button[@type='submit']")
+        login_button = self.driver.find_element(By.XPATH, "//button[@type='submit']")
+        return login_button
+
 
 # ---------------- ActionElement ----------------
 class ActionElement:
